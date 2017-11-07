@@ -9,17 +9,19 @@ import matplotlib.pyplot as plt
 
 '''
 Create a linear regresssion object. This contains the functions for fitting and predicting,
-and the parameters that are learned
+and the parameters that are learned.
+
+We'll use this to predict core body tempereature from skin temperature - I fabricated the problem
 ''' 
 regressor = LinearRegression()
 
 '''
-Create objects responsible for creating higher order polynomial features
+Create object responsible for creating higher order polynomial features from original features
 '''
 third_degree_features = PolynomialFeatures(degree=3)
-hundred_degree_features = PolynomialFeatures(degree=100)
 
 '''
+Fabricate the data we'll use (features and labels)
 feature: skin_temperature
 label: core_temperature
 '''
@@ -27,6 +29,9 @@ x = np.arange(-5,5,0.05)
 skin_temperature = x*1.5+22
 core_temperature = 1 / (1 + np.exp(-x))*3 + 35 + np.random.normal(0, 0.1, x.shape[0])
 
+'''
+sklearn provides a function to randomly split data into training and test sets
+'''
 skin_temperature_train, skin_temperature_test, core_temperature_train, core_temperature_test = train_test_split(skin_temperature, core_temperature)
 
 plt.figure()
@@ -35,7 +40,7 @@ plt.xlabel('Skin Temperature (C)')
 plt.ylabel('Core Temperature (C)')
 
 '''
-Fit linear regression to the data, where the features are only the raw data (only first order features)
+Training stage: fit linear regression to the data, where the features are only the raw data (only first order features)
 '''
 features = skin_temperature_train.reshape(-1,1)
 regressor.fit(features, core_temperature_train)
@@ -49,7 +54,7 @@ line = m * skin_temperature + b
 plt.plot(skin_temperature, line, color='orange')
 
 '''
-Create 1st, 2nd, and 3rd order features from our raw data, and fit linear regression to these
+Create 1st, 2nd, and 3rd order features from our raw data, and train again to fit linear regression to these
 '''
 features = third_degree_features.fit_transform(skin_temperature_train.reshape(-1,1))
 regressor.fit(features, core_temperature_train)
