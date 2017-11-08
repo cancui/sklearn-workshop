@@ -7,38 +7,25 @@ from sklearn.preprocessing import scale
 
 import matplotlib.pyplot as plt
 import seaborn as sns
-
 sns.set(style="white")
 
-'''
-Fabricate data for classification where X is the feature array and y is the label array
-'''
+# Fabricate data for classification where X is the feature array and y is the label array
 X, y = make_classification(400, 2, 2, 0, weights=[.5, .5], random_state=15)
 
-'''
-Standardize the data for better classifier performance
-'''
+# Standardize the data for better classifier performance
 X = scale(X)
 
-'''
-Split available data into training and test sets
-'''
+# Split available data into training and test sets
 X_train, X_test, y_train, y_test = train_test_split(X, y)
 
-'''
-Create a logstic regression object, which contains functions for fitting and predicting,
-as well as the model parameters that are learned
-'''
+# Create a logstic regression object, which contains functions for fitting and predicting,
+# as well as the model parameters that are learned
 logistic_regression = LogisticRegression()
 
-'''
-Train the model on the training data
-'''
+# Train the model on the training data
 logistic_regression.fit(X_train, y_train)
 
-'''
-Code to visualize the resulting decision boundary
-'''
+# Visualize the resulting decision boundary
 xx, yy = np.mgrid[-5:5:.01, -5:5:.01]
 grid = np.c_[xx.ravel(), yy.ravel()]
 probs = logistic_regression.predict_proba(grid)[:, 1].reshape(xx.shape)
@@ -56,9 +43,7 @@ plt.ylim((-3,3))
 plt.xlabel('Feature A')
 plt.ylabel('Feature B')
 
-'''
-Test classifier accuracy
-'''
+# Test classifier accuracy
 predictions = logistic_regression.predict(X_test)
 accuracy = accuracy_score(y_test, predictions)
 f1_score = f1_score(y_test, predictions)
